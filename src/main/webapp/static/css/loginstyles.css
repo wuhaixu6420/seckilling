@@ -56,7 +56,8 @@ input, button {
 	position:absolute;
 	border-radius:15px;
 	padding:90px 70px 50px 70px;
-	background:rgba(40,57,101,.9);
+/* 	background:rgba(40,57,101,.9); */
+	background:rgba(0,0,0,.9);
 }
 .login-html .sign-in-htm,
 .login-html .sign-up-htm{

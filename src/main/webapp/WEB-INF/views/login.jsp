@@ -6,8 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<title>登录</title>
-	<%@include file="/WEB-INF/views/common/head.jsp" %>
-	<link type="text/css" rel="stylesheet" href="/static/loginstyles.css">
+	<link type="text/css" rel="stylesheet" href="/static/css/loginstyles.css">
 </head>
 <body>
 	<div class="login-background"><img src="/img/background/login.jpg"></div>
