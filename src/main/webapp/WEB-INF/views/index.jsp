@@ -54,11 +54,11 @@ var browser={
 		 	<div class="logo adjustAuto page1logo">此处放logo</div>
 			<div class="page1text1 adjustAutoText">贴近你的创意</div>
 			<div class="page1text2 adjustAutoText">从未想象的简单与有趣，给你全新的线上设计体验，随时随地开启设计，呈现你的创意和想法。</div>
-			<a href="#/index/reg.do" target="_blank">
-				<div class="sign adjustAutoText page1-div1">注&nbsp;&nbsp;&nbsp;册</div>
+			<a href="/login" target="_blank">
+				<span class="sign adjustAutoText page1-div1">注&nbsp;&nbsp;&nbsp;册</span>
 			</a> 
-			<a href="#/index/login.do" target="_blank">
-				<div class="login adjustAutoText page1-div2">登&nbsp;&nbsp;&nbsp;录</div>
+			<a href="/login" target="_blank">
+				<span class="login adjustAutoText page1-div2">登&nbsp;&nbsp;&nbsp;录</span>
 			</a>			
 		</div>
 		<div class="page1bottom adjustAuto"></div>
@@ -137,13 +137,13 @@ var browser={
 		<div class="page9img2 page9img adjustAuto page7img4"><img src="/img/index/2(4).png"></div>
 		<div class="page9img3 page9img adjustAuto page7img5"><img src="/img/index/3(3).png"></div>
 		<div class="page9img4 page9img adjustAuto page7img6"><img src="/img/index/4(3).png"></div>
-		<a href="#/index/login.do"><div class="page9img5 page9img adjustAuto page7img-div1"><img src="/img/index/5(3).png"></div></a>
-		<a href="#/index/login.do"><div class="page9img6 page9img adjustAuto page7img-div2"><img src="/img/index/6(2).png"></div></a>
-		<a href="#/index/login.do"><div class="page9img7 page9img adjustAuto page7img-div3"><img src="/img/index/7(1).png"></div></a>
+		<a href="#/index/login.do"><span class="page9img5 page9img adjustAuto page7img-div1"><img src="/img/index/5(3).png"></span></a>
+		<a href="#/index/login.do"><span class="page9img6 page9img adjustAuto page7img-div2"><img src="/img/index/6(2).png"></span></a>
+		<a href="#/index/login.do"><span class="page9img7 page9img adjustAuto page7img-div3"><img src="/img/index/7(1).png"></span></a>
 		<div style="position:absolute;bottom:0px;width:100%">
-		<div class="footerText">
-			<span>chuangkit.com?2013-2014</span>
-			<span>京ICP1231232号</span>
+		<div class="footerText" style="color: white;">
+			<span>www.lonice.com.cn&copy;2016-2017</span>
+			<span>皖ICP备16006624号</span>
 		</div>
 		<div></div>
 	</div>
