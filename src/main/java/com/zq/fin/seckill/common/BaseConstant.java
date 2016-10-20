@@ -5,6 +5,10 @@
  *******************************************************************************/
 package com.zq.fin.seckill.common;
 
+import java.io.IOException;
+import java.util.Properties;
+
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
  * 公用衡量
@@ -25,21 +29,25 @@ public class BaseConstant {
 	//失效状态
 	public static String failure_state="-1";
 	
-//	/** 用于获取静态配置值 */
-//	private static Properties props = null;
-//	
-//	/** 股觅定时器接口 */
-//	public static String GUMI_PHP_UPDATETIMING_API;
-//	
-//	static {
-//		try {
-//			props = PropertiesLoaderUtils.loadAllProperties("config.properties");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		/** 股觅  定时器接口*/
-//		GUMI_PHP_UPDATETIMING_API = props.getProperty("gumi.php.updatetiming.api");
-//	}
+	/** 用于获取静态配置值 */
+	private static Properties props = null;
+	
+	/** 验证码js */
+	public static String LOGINUTIL_URL;
+	/** 验证码对比图片 */
+	public static String CODERECOGNITIONUTIL_URL;
+	
+	static {
+		try {
+			props = PropertiesLoaderUtils.loadAllProperties("config.properties");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/** 验证码js */
+		LOGINUTIL_URL = props.getProperty("loginutil.url");
+		/** 验证码对比图片 */
+		CODERECOGNITIONUTIL_URL = props.getProperty("coderecognitionutil.url");
+	}
 	
 }
