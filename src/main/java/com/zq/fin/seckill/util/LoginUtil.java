@@ -1,10 +1,6 @@
 package com.zq.fin.seckill.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,10 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,23 +22,14 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -53,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zq.fin.seckill.common.BaseConstant;
+import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 
 
 public class LoginUtil
@@ -61,19 +46,43 @@ public class LoginUtil
 			.getLogger(LoginUtil.class);
 	
     public static Map<String, DefaultHttpClient> httpclientMap = new HashMap<String, DefaultHttpClient>();
-//    public static DefaultHttpClient httpclient = getHttpClient();
-
     //模拟登陆
     public static String index_url = "https://trade.glsc.com.cn/";
     public static String login_url = "https://trade.glsc.com.cn/Default.aspx";
     public static String img_path_url = "https://trade.glsc.com.cn/usercenter/checkcode.aspx?0.09639477171003819";
     public static String image_save_path = "code.jpg";
     
-    //取得历史成交记录
-    public static String lscjcx_url = "https://trade.glsc.com.cn/WTCX/Lscjcx.aspx";
     
-    
-
+    public static void getCookie(GlscLoginServiceModel glscLoginServiceModel) throws NullPointerException, Exception{
+		
+		String cookie = null;
+		
+		try {
+			
+			ResponsObj responsObj = LoginUtil.pageinit(String.valueOf(glscLoginServiceModel.getUserid()));
+			if(ObjectUtil.isEmpty(responsObj)){
+				logger.info("cookie is null");
+				return ;
+			}
+			logger.info("1. cookie=" + responsObj.getCookie());
+			
+			LoginUtil.imgCookie(responsObj, String.valueOf(glscLoginServiceModel.getUserid()));
+			logger.info("2. cookie=" + responsObj.getCookie());
+			
+			String code = LoginUtil.identifyImg();
+			logger.info("3. code=" + code);
+			
+			cookie = LoginUtil.loginCookie(code, glscLoginServiceModel.getStckaccount(), glscLoginServiceModel.getPw(), responsObj, String.valueOf(glscLoginServiceModel.getUserid()));
+			logger.info("4. cookie=" + cookie);
+		
+			//更新cookie，或者是存入cookie
+			glscLoginServiceModel.setCookie(cookie);
+		} catch (NullPointerException e) {
+			throw e;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
     
     public static class ResponsObj {
     	
@@ -228,105 +237,6 @@ public class LoginUtil
         }
     }
 
-    //取得交易数据
-    public static String getTradeInfo(ResponsObj responsObj, String userid)
-    {
-
-        BufferedReader in = null;
-        
-        HttpResponse response = null;
-        
-        //用map保持多用户多sessionid连接
-        if(!httpclientMap.containsKey(userid)){
-        	httpclientMap.put(userid, new DefaultHttpClient());
-        }
-        DefaultHttpClient httpclient = httpclientMap.get(userid);
-        
-        try
-        {
-            httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
-            HttpGet httpGet = new HttpGet(lscjcx_url);
-            httpGet.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);
-            
-            httpGet.setHeader("Cache-Control", "max-age=0");
-            httpGet.setHeader("Connection", "keep-alive");
-            httpGet.setHeader("Cookie", responsObj.getCookie());
-            httpGet.setHeader("Host", "trade.glsc.com.cn");
-            httpGet.setHeader("Referer", "https://trade.glsc.com.cn/left.aspx");
-//            httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36");
-            
-            response = httpclient.execute(httpGet);
-
-            String charset = "";  
-            String contentType = response.getEntity().getContentType().getValue();  
-            if(StringUtil.isNotEmpty(contentType)&&contentType.indexOf("charset")>0){  
-                 charset = contentType.substring(contentType.indexOf("charset=")+"charset=".length());  
-            }  
-            if(StringUtil.isEmpty(charset)){  
-                 charset = "UTF-8";  
-            }  
-            StringBuilder sb = new StringBuilder();  
-            BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), charset));  
-            String line;  
-            while ((line = br.readLine()) != null) {  
-                 sb.append(line);  
-            }  
-            String content = sb.toString();  
-            Document document = Jsoup.parse(content);  
-            @SuppressWarnings("unused")
-			org.jsoup.select.Elements eles = document.select("input");
-            
-            //cookies
-            List<Cookie> cookies = httpclient.getCookieStore().getCookies();
-            //httpGet.releaseConnection();
-            StringBuilder cookiesSB = new StringBuilder();
-            //System.out.println("第一次cookie");
-            if (cookies.isEmpty())
-            {
-                System.out.println("None");
-            } else
-            {
-                for (int i = 0; i < cookies.size(); i++)
-                {
-                    // System.out.println("- " + cookies.get(i).toString());
-                    cookiesSB.append(cookies.get(i).getName()).append("=")
-                            .append(cookies.get(i).getValue()).append("; ");
-                }
-            }
-            responsObj.setCookie(cookiesSB.toString());
-
-            //modulus
-            int idx = content.indexOf("var key = new RSAKeyPair");
-            if(idx > 0){
-            	String substr = content.substring(idx, idx + 300);
-            	substr = substr.split(",")[2];
-            	substr = substr.replaceAll("\"", "");
-            	substr = substr.trim();
-            	responsObj.setModulus(substr);
-            }
-            
-            return "ok";
-            
-        }  catch (Exception e)
-        {
-            e.printStackTrace();
-
-            return null;
-        } finally{
-            if(in != null)
-                try
-                {
-                    in.close();
-                    if(ObjectUtil.isNotEmpty(response)){
-            			response.getEntity().getContent().close();
-            		}
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-        }
-    }
-    
     public static String imgCookie(ResponsObj responsObj, String userid)
     {
 
@@ -379,7 +289,6 @@ public class LoginUtil
     }
     
     public static String identifyImg(){
-    	//String str = CQZDMDLL.result(image_save_path);
     	String str = null;
 		try {
 			str = CodeRecognitionUtil.getAllOcr(image_save_path);
@@ -387,9 +296,6 @@ public class LoginUtil
 			System.out.println("图片验证码识别失败！");
 			e.printStackTrace();
 		}
-//        if(str != null && str.trim().matches("\\d{4,}"))
-//            return str;
-
         return str;
     }
 
@@ -506,66 +412,7 @@ public class LoginUtil
         return null;
     }
 
-    
-    public static String rend(String cookie, String userid)
-    {
-        BufferedReader in = null;
-
-        HttpResponse response = null;
-        
-        //用map保持多用户多sessionid连接
-        if(!httpclientMap.containsKey(userid)){
-        	httpclientMap.put(userid, new DefaultHttpClient());
-        }
-        DefaultHttpClient httpclient = httpclientMap.get(userid);
-        
-        try
-        {
-            // 1 获取 _tb_token_
-            httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 20000);
-            HttpGet httpGet = new HttpGet("http://www.400gb.com/index.php");
-            httpGet.setHeader("Cookie", cookie);
-            httpGet.setHeader("Host", "www.400gb.com");
-            httpGet.setHeader("Referer", "http://www.400gb.com/index.php");
-//            httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36 CoolNovo/2.0.9.19");
-
-            httpGet.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 20000);
-            response = httpclient.execute(httpGet); 
-
-
-            in = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "utf-8"));
-            StringBuilder sb = new StringBuilder();
-            String s = "";
-            while ((s = in.readLine()) != null)
-            {
-                sb.append(s.trim()).append("\n");
-            }
-
-            System.out.println(sb.toString());
-
-            return sb.toString();
-        }  catch (Exception e)
-        {
-            e.printStackTrace();
-
-            return null;
-        } finally{
-            if(in != null)
-                try
-                {
-                    in.close();
-                    if(ObjectUtil.isNotEmpty(response)){
-            			response.getEntity().getContent().close();
-            		}
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-        }
-    }
-
-
-    public static boolean download(InputStream in, String path)
+    private static boolean download(InputStream in, String path)
     {
         FileOutputStream out = null;
         try
@@ -615,113 +462,7 @@ public class LoginUtil
         return false;
     }
 
-    /**
-     * 采集
-     * @param url：指定URL
-     * @param times：如果采集失败，采集最少次数（2次）
-     * @return
-     */
-    public static boolean download(String urlstr, String path)
-    {
-        if(urlstr == null || "".equals(urlstr.trim()))
-            return false;
-
-
-        InputStream in = null;
-        FileOutputStream out = null;
-        try
-        {
-            System.out.println("download url " + urlstr);
-            URL url = new URL(urlstr);
-            URLConnection connection = url.openConnection();
-            connection.setConnectTimeout(5000);//jdk 1.5换成这个,连接超时
-            //connection.setReadTimeout(5000);//jdk 1.5换成这个,读操作超时
-            connection.setDoOutput(true);
-
-            out = new FileOutputStream(path);
-            in = connection.getInputStream();
-            byte b[] = new byte[1024];
-            int j = 0;
-            while ((j = in.read(b)) != -1)
-            {
-                out.write(b, 0, j);
-            }
-            out.flush();
-            File file = new File(path);
-            if(file.exists() && file.length() == 0)
-                return false;
-            return true;
-        } catch (MalformedURLException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            if("FileNotFoundException".equals(e.getClass().getSimpleName()))
-                System.err.println("download FileNotFoundException");
-            if("SocketTimeoutException".equals(e.getClass().getSimpleName()))
-                System.err.println("download SocketTimeoutException");
-            else
-                e.printStackTrace();
-        } finally{
-
-            if(out != null)
-                try
-                {
-                    out.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            if(in != null)
-                try
-                {
-                    in.close();
-                } catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-        }
-        return false;
-    }
-    
-    public static InputStream getUrlImg(String URLName) throws Exception
-    {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        int HttpResult = 0; // 服务器返回的状态
-        URL url = new URL(URLName); // 创建URL
-        URLConnection urlconn = url.openConnection(); // 试图连接并取得返回状态码urlconn.connect();
-        HttpURLConnection httpconn = (HttpURLConnection) urlconn;
-        HttpResult = httpconn.getResponseCode();
-        if (HttpResult != HttpURLConnection.HTTP_OK)
-        { // 不等于HTTP_OK说明连接不成功
-            System.out.print("连接失败！");
-        } else
-        {
-            int filesize = urlconn.getContentLength(); // 取数据长度
-            System.out.println(filesize);
-            BufferedInputStream bis = new BufferedInputStream(urlconn.getInputStream());
-            BufferedOutputStream bos = new BufferedOutputStream(os);
-            byte[] buffer = new byte[1024]; // 创建存放输入流的缓冲
-            int num = -1; // 读入的字节数
-            while (true)
-            {
-                num = bis.read(buffer); // 读入到缓冲区
-                if (num == -1)
-                {
-                    bos.flush();
-                    break; // 已经读完
-                }
-                bos.flush();
-                bos.write(buffer, 0, num);
-            }
-            bos.close();
-            bis.close();
-        }
-        ByteArrayInputStream bis = new ByteArrayInputStream(os.toByteArray());
-        return bis;
-    }
-    
-    public static String getPosx(String jspath, String encryptionExponent, String modulus, String id, String pw) throws FileNotFoundException, ScriptException, NoSuchMethodException{
+    private static String getPosx(String jspath, String encryptionExponent, String modulus, String id, String pw) throws FileNotFoundException, ScriptException, NoSuchMethodException{
     	
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("javascript");  
         Bindings bind = engine.createBindings();  
@@ -744,37 +485,5 @@ public class LoginUtil
         //}  
     	
     	return result;
-    }	/**
-	 * 适合多线程的HttpClient,用httpClient4.2.1实现
-	 * @return DefaultHttpClient
-	 */
-	public static DefaultHttpClient getHttpClient()
-	{  		
-	    // 设置组件参数, HTTP协议的版本,1.1/1.0/0.9 
-		HttpParams params = new BasicHttpParams(); 
-	    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1); 
-	    HttpProtocolParams.setUserAgent(params, "HttpComponents/1.1"); 
-	    HttpProtocolParams.setUseExpectContinue(params, true); 	  
-
-	    //设置连接超时时间 
-	    int REQUEST_TIMEOUT = 10*1000;	//设置请求超时10秒钟 
-		int SO_TIMEOUT = 10*1000; 		//设置等待数据超时时间10秒钟 
-		//HttpConnectionParams.setConnectionTimeout(params, REQUEST_TIMEOUT);
-		//HttpConnectionParams.setSoTimeout(params, SO_TIMEOUT);
-	    params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, REQUEST_TIMEOUT);  
-	    params.setParameter(CoreConnectionPNames.SO_TIMEOUT, SO_TIMEOUT); 
-	  
-		//设置访问协议 
-		SchemeRegistry schreg = new SchemeRegistry();  
-		schreg.register(new Scheme("http",80,PlainSocketFactory.getSocketFactory())); 
-		schreg.register(new Scheme("https", 443, SSLSocketFactory.getSocketFactory())); 	  
-		
-		//多连接的线程安全的管理器 
-		PoolingClientConnectionManager pccm = new PoolingClientConnectionManager(schreg);
-		pccm.setDefaultMaxPerRoute(20);	//每个主机的最大并行链接数 
-		pccm.setMaxTotal(200);			//客户端总并行链接最大数    
-		
-		DefaultHttpClient httpClient = new DefaultHttpClient(pccm, params);  
-		return httpClient;
-	}
+    }
 }
