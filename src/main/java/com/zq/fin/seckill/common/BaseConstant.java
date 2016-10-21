@@ -10,6 +10,8 @@ import java.util.Properties;
 
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import com.zq.fin.seckill.dto.GlscLoginServiceModel;
+
 /**
  * 公用衡量
  * 
@@ -28,6 +30,15 @@ public class BaseConstant {
 	
 	//失效状态
 	public static String failure_state="-1";
+	
+	//登录账户
+	public static String stckaccount;
+	
+	//登录密码
+	public static String stckaccountpw;
+	
+	//用于证券登录使用
+	protected static GlscLoginServiceModel glscLoginServiceModel;
 	
 	/** 用于获取静态配置值 */
 	private static Properties props = null;

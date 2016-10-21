@@ -16,5 +16,7 @@ public interface BaseGroup {
 	public static interface GroupImage{};
 	/** AJAX验证*/
 	public static interface GroupAjax{};
+	/** 证券登录*/
+	public static interface GroupGlscLogin{};
 
 }

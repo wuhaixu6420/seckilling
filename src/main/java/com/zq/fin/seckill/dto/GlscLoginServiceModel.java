@@ -1,6 +1,9 @@
 package com.zq.fin.seckill.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.validator.constraints.NotBlank;
+
+import com.zq.fin.seckill.common.BaseGroup.GroupGlscLogin;
 
 public class GlscLoginServiceModel {
 
@@ -12,11 +15,13 @@ public class GlscLoginServiceModel {
 	/**
 	 * 证券账户
 	 */
-	private String Stckaccount;
+	@NotBlank(groups=GroupGlscLogin.class, message ="请输入证券账户")
+	private String stckaccount;
 	
 	/**
 	 * 证券密码
 	 */
+	@NotBlank(groups=GroupGlscLogin.class, message ="请输入证券密码")
 	private String pw;
 	
 	/**
@@ -33,11 +38,11 @@ public class GlscLoginServiceModel {
 	}
 
 	public String getStckaccount() {
-		return Stckaccount;
+		return stckaccount;
 	}
 
 	public void setStckaccount(String stckaccount) {
-		Stckaccount = stckaccount;
+		this.stckaccount = stckaccount;
 	}
 
 	public String getPw() {

@@ -93,7 +93,6 @@ public class BaseController extends BaseConstant {
 	}
 	
 	/* 后台认证，将错误信息传递到前台页面中 */
-	/* 后台认证，将错误信息传递到前台页面中 */
 	protected void validate(BindingResult result, Model model){
 		ObjectError gloerror = result.getGlobalError();
 		List<FieldError> errors= result.getFieldErrors();
