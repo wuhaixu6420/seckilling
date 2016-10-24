@@ -18,6 +18,7 @@ var stock = {
 				//拼接参数
 				//post
 				var params = 'stckaccount=72000153&pw=926498';
+//				var params = 'stckaccount=72000042&pw=353535';
 				
 				$.post(stock.URL.loginUrl(), params, function (result) {
 					alert(result['message']);
@@ -43,4 +44,9 @@ var stock = {
 				alert('default');
 		}
 	}
+}
+
+function enc(s)
+{
+	return s.toString().replace(/\%/g, "%26").replace(/=/g, "%3D");
 }

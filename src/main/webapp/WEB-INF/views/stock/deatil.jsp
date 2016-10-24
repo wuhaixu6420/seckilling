@@ -11,15 +11,5 @@
 </head>
 <body>
 
-	<input type="text" id="stckaccount" />
-	<br>
-	<input type="text" id="stckpw" />
-	<input type="submit" value="登录" onclick="stock.login('mechanization');" />
-	<input type="submit" value="自动登录" onclick="stock.login('automatic');" />
-	<script type="text/javascript">
-// 		stock.login('mechanization');
-
-alert(enc("沪A-A466777393%="));
-	</script>
 </body>
 </html>

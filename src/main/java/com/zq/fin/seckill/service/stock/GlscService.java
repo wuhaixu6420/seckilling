@@ -1,7 +1,6 @@
 package com.zq.fin.seckill.service.stock;
 
 import com.zq.fin.seckill.dto.DataRseult;
-import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
 
 /**
@@ -27,14 +26,14 @@ public interface GlscService {
 	 * 通过config文件获取证券信息
 	 * @return
 	 */
-	RegModelResult getGlscLoginServiceModelforConfig();
+	void getGlscLoginServiceModelforConfig();
 	
 	/**
 	 * 手动买入
 	 * @param glscLoginServiceModel
 	 * @return
 	 */
-	RegModelResult glscBuy(GlscLoginServiceModel glscLoginServiceModel);
+	RegModelResult glscBuy(String stockCode, String price, String num);
 	
 	/**
 	 * 自动买入
@@ -47,7 +46,7 @@ public interface GlscService {
 	 * @param glscLoginServiceModel
 	 * @return
 	 */
-	RegModelResult glscSell(GlscLoginServiceModel glscLoginServiceModel);
+	RegModelResult glscSell(String stockCode, String price, String num);
 	
 	/**
 	 * 自动卖出
@@ -66,4 +65,10 @@ public interface GlscService {
 	 * @return
 	 */
 	RegModelResult glscGetAsset();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	DataRseult<?> getStockInfoForXueQiu();
 }

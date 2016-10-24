@@ -1,17 +1,22 @@
 package com.zq.fin.seckill.service.stock.impl;
 
+import java.net.ConnectException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.zq.fin.seckill.dto.DataRseult;
-import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
 import com.zq.fin.seckill.entity.model.PositionGlscModel;
 import com.zq.fin.seckill.service.BaseService;
@@ -19,6 +24,7 @@ import com.zq.fin.seckill.service.stock.GlscService;
 import com.zq.fin.seckill.util.HtmlUtil;
 import com.zq.fin.seckill.util.HttpsRequest;
 import com.zq.fin.seckill.util.LoginUtil;
+import com.zq.fin.seckill.util.StockUtil;
 
 /**
  * 用于国联证券账户的相关业务
@@ -46,17 +52,17 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		return new RegModelResult(true, "登录成功");
 	}
 	
-	public RegModelResult getGlscLoginServiceModelforConfig(){
+	@Override
+	public void getGlscLoginServiceModelforConfig(){
 		
 		glscLoginServiceModel.setStckaccount(stckaccount);
 		glscLoginServiceModel.setPw(stckaccountpw);
 		
-		return new RegModelResult(true, "自动登录成功");
 	}
 
 	@Override
-	public RegModelResult glscBuy(GlscLoginServiceModel glscLoginServiceModel) {
-		// TODO Auto-generated method stub
+	public RegModelResult glscBuy(String stockCode, String price, String num) {
+		StockUtil.judgeStock(stockCode);
 		return null;
 	}
 
@@ -67,7 +73,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	}
 
 	@Override
-	public RegModelResult glscSell(GlscLoginServiceModel glscLoginServiceModel) {
+	public RegModelResult glscSell(String stockCode, String price, String num) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -80,7 +86,6 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 
 	@Override
 	public DataRseult<List<PositionGlscModel>> glscGetPosition() {
-		// TODO Auto-generated method stub
 		//获取持仓信息
 		String request = HttpsRequest.XMLhttpRequest(chicang_url + "?" + System.currentTimeMillis(), "GET", glscLoginServiceModel.getCookie());
 		
@@ -131,5 +136,33 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	public DataRseult<?> getStockInfoForXueQiu(){
+		
+		try {
+			String requestUrl = "https://xueqiu.com/stock/forchart/stocklist.json";
+			
+			Map<String, String> params = new HashMap<String, String>();
+			
+			params.put("symbol", "SH000001");
+			params.put("period", "1d");
+			params.put("one_min", "1");
+			params.put("_", String.valueOf(new Date().getTime()));
+			
+			String str = HttpsRequest.net(requestUrl, params, "GET");
+			
+			System.out.println(str);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	@Test
+	public void wee(){
+		getStockInfoForXueQiu();
+	}
+	
 }

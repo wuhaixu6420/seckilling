@@ -6,10 +6,12 @@
 package com.zq.fin.seckill.common;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
 
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import com.google.common.collect.Maps;
 import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 
 /**
@@ -30,6 +32,9 @@ public class BaseConstant {
 	
 	//失效状态
 	public static String failure_state="-1";
+	
+	public static final String SH = "SH";
+	public static final String SZ = "SZ";
 	
 	//登录账户
 	public static String stckaccount;
@@ -59,6 +64,12 @@ public class BaseConstant {
 		LOGINUTIL_URL = props.getProperty("loginutil.url");
 		/** 验证码对比图片 */
 		CODERECOGNITIONUTIL_URL = props.getProperty("coderecognitionutil.url");
+	}
+	
+	public static Map<Integer, String> stockMap = Maps.newLinkedHashMap();
+	static{
+		stockMap.put(1,"沪A-A466777393");
+		stockMap.put(0, "深A-0200381345");
 	}
 	
 }

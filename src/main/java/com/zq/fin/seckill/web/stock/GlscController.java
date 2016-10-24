@@ -1,5 +1,7 @@
 package com.zq.fin.seckill.web.stock;
 
+import java.net.ConnectException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -9,9 +11,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zq.fin.seckill.common.BaseConstant;
 import com.zq.fin.seckill.common.BaseGroup.GroupGlscLogin;
+import com.zq.fin.seckill.dto.DataRseult;
 import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
+import com.zq.fin.seckill.entity.model.StockBusinessModel;
+import com.zq.fin.seckill.enums.StockStatEnum;
 import com.zq.fin.seckill.service.stock.GlscService;
+import com.zq.fin.seckill.util.LoginUtil;
 import com.zq.fin.seckill.web.BaseController;
 
 /**
@@ -70,12 +76,30 @@ public class GlscController extends BaseController {
 	}
 	
 	/**
+	 * 获取持仓信息
+	 * @return
+	 */
+	@RequestMapping(value = "/position", method = RequestMethod.GET)
+	@ResponseBody
+	public DataRseult<?> glscGetPosition(){
+		DataRseult<?> dataRseult = glscService.glscGetPosition();
+		return dataRseult;
+	}
+	
+	/**
 	 * 证券买入
 	 * @return
 	 */
 	@RequestMapping(value = "/buy", method = RequestMethod.GET)
 	@ResponseBody
-	public RegModelResult buyGlsc(){
+	public RegModelResult buyGlsc(String stockCode, String price, String num){
+		try {
+//			LoginUtil.buyStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
+			LoginUtil.buyStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
+		} catch (ConnectException e) {
+			e.printStackTrace();
+		}
+		
 		return null;
 	}
 	
@@ -85,7 +109,24 @@ public class GlscController extends BaseController {
 	 */
 	@RequestMapping(value = "/sell", method = RequestMethod.GET)
 	@ResponseBody
-	public RegModelResult sellGlsc(){
+	public RegModelResult sellGlsc(String stockCode, String price, String num){
+		try {
+//			LoginUtil.sellStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
+			LoginUtil.sellStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
+		} catch (ConnectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	public String detail(){
+		return "stock/detail";
+	}
+	
+	@RequestMapping(value = "/detail", method = RequestMethod.POST)
+	public String getStockInfoForXueQiu(){
 		return null;
 	}
 	
