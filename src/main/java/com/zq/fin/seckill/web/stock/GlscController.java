@@ -1,7 +1,5 @@
 package com.zq.fin.seckill.web.stock;
 
-import java.net.ConnectException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -14,10 +12,8 @@ import com.zq.fin.seckill.common.BaseGroup.GroupGlscLogin;
 import com.zq.fin.seckill.dto.DataRseult;
 import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
-import com.zq.fin.seckill.entity.model.StockBusinessModel;
-import com.zq.fin.seckill.enums.StockStatEnum;
+import com.zq.fin.seckill.service.BaseService;
 import com.zq.fin.seckill.service.stock.GlscService;
-import com.zq.fin.seckill.util.LoginUtil;
 import com.zq.fin.seckill.web.BaseController;
 
 /**
@@ -67,6 +63,7 @@ public class GlscController extends BaseController {
 	@ResponseBody
 	public RegModelResult automaticLoginGlsc(){
 		//调取config中文件信息
+		BaseService.getGLscStockAccountByConfig();
 		//证券登录
 		RegModelResult regModelResult = glscService.glscLogin();
 		//返回，成功  跳转，失败  继续登录
@@ -96,44 +93,13 @@ public class GlscController extends BaseController {
 	}
 	
 	/**
-	 * 证券买入
-	 * @return
-	 */
-	@RequestMapping(value = "/buy", method = RequestMethod.GET)
-	@ResponseBody
-	public RegModelResult buyGlsc(String stockCode, String price, String num){
-		try {
-			LoginUtil.buyStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
-		} catch (ConnectException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * 证券卖出
-	 * @return
-	 */
-	@RequestMapping(value = "/sale", method = RequestMethod.GET)
-	@ResponseBody
-	public RegModelResult saleGlsc(String stockCode, String price, String num){
-		try {
-			LoginUtil.saleStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
-		} catch (ConnectException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	/**
 	 * jd的股神当日成交记录
 	 * @return
 	 */
 	@RequestMapping(value = "/clichdeal", method = RequestMethod.GET)
 	@ResponseBody
 	public DataRseult<?> getClichdeal(){
-		DataRseult<?> dataRseult = glscService.nowDayClinchdeal("小妖嘿嘿163");
+		DataRseult<?> dataRseult = glscService.nowDayClinchdeal(JDPIN);
 		return dataRseult;
 	}
 	
@@ -142,7 +108,6 @@ public class GlscController extends BaseController {
 	 */
 	@RequestMapping(value = "documentary", method = RequestMethod.GET)
 	public DataRseult<?> automaticDocumentary(){
-		
 		
 		return null;
 	}

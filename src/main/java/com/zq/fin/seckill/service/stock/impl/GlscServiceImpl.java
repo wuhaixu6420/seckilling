@@ -13,7 +13,6 @@ import org.jsoup.nodes.Element;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.zq.fin.seckill.dto.DataRseult;
@@ -60,12 +59,6 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		return new RegModelResult(true, "登录成功");
 	}
 	
-	@Override
-	public RegModelResult glscBuy(String stockCode, String price, String num) {
-		StockUtil.judgeStock(stockCode);
-		return null;
-	}
-
 	@Override
 	public RegModelResult glscBuy(AssetGlscMode assetGlscMode, ClinchdealGLscModel clinchdealGLscModel) {
 		/**
@@ -123,11 +116,6 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		}
 	}
 	
-	@Override
-	public RegModelResult glscSale(String stockCode, String price, String num) {
-		return null;
-	}
-
 	@Override
 	public RegModelResult glscSale(AssetGlscMode assetGlscMode, ClinchdealGLscModel clinchdealGLscModel) {
 		/**
@@ -200,20 +188,6 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		}
 	}
 	
-	
-	@Test
-	public void dawde(){
-		BigDecimal bigDecimal = new BigDecimal(91.235);
-		int num = bigDecimal.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP).intValue();
-		
-		System.out.println(num);
-		
-		bigDecimal = new BigDecimal(num * 100);
-		
-		System.out.println(bigDecimal);
-		
-	}
-
 	@Override
 	public DataRseult<List<PositionGlscModel>> glscGetPosition() {
 		//获取持仓信息
@@ -324,11 +298,6 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		return null;
 	}
 	
-	@Test
-	public void wesd(){
-		System.out.println(nowDayClinchdeal("小妖嘿嘿163"));
-	}
-	
 	@Override
 	public DataRseult<?> nowDayClinchdeal(String pin) {
 		logInfoStart(logger, Thread.currentThread().getStackTrace()[1].getMethodName());
@@ -397,10 +366,10 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	/**
 	 * 定时器，周一至周五，每一分钟获取数据
 	 */
-	@Scheduled(cron = "0 0/1 9,10,11,13,14,15 * * MON-FRI")
 	@Override
 	public DataRseult<?> automaticDocumentary(){
 		//先登录状态
+		getGLscStockAccountByConfig();
 		//获取当前总资产
 		DataRseult<?> dataRseultAsset = glscGetAsset();
 		//不在登录状态
@@ -415,8 +384,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 			//强转类型
 			AssetGlscMode assetGlscMode = (AssetGlscMode)dataRseultAsset.getData();
 			//可以考虑数据库换一个跟单用户
-			//TODO
-			DataRseult<?> dataRseult_Clinchdeal = nowDayClinchdeal("若智工作室");
+			DataRseult<?> dataRseult_Clinchdeal = nowDayClinchdeal(JDPIN);
 			
 			if(dataRseult_Clinchdeal.getData() instanceof List){
 				@SuppressWarnings("unchecked")

@@ -25,24 +25,10 @@ public interface GlscService {
 	RegModelResult glscLogin();
 	
 	/**
-	 * 手动买入
-	 * @param glscLoginServiceModel
-	 * @return
-	 */
-	RegModelResult glscBuy(String stockCode, String price, String num);
-	
-	/**
 	 * 自动买入
 	 * @return
 	 */
 	RegModelResult glscBuy(AssetGlscMode assetGlscMode, ClinchdealGLscModel clinchdealGLscModel);
-	
-	/**
-	 * 手动卖出
-	 * @param glscLoginServiceModel
-	 * @return
-	 */
-	RegModelResult glscSale(String stockCode, String price, String num);
 	
 	/**
 	 * 自动卖出

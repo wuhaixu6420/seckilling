@@ -23,6 +23,14 @@ public class BaseService extends BaseConstant{
 	protected static Map<String, ClinchdealGLscModel> clichdealMap = new HashMap<>();
 	
 	/**
+	 * 设置证券账户
+	 */
+	public static void getGLscStockAccountByConfig() {
+		glscLoginServiceModel.setStckaccount(STCKACCOUNT);
+		glscLoginServiceModel.setPw(STCKACCOUNTPW);
+	}
+	
+	/**
 	 * log记录start（Service）
 	 */
 	protected static void logInfoStart(Logger logger, String methodname){

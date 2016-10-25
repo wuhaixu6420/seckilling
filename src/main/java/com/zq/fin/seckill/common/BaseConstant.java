@@ -45,6 +45,14 @@ public class BaseConstant {
 	//用于证券登录使用
 	protected static GlscLoginServiceModel glscLoginServiceModel;
 	
+	//证券账户
+	public static String STCKACCOUNT;
+	//证券密码
+	public static String STCKACCOUNTPW;
+	
+	//获取jd的pin
+	public static String JDPIN;
+	
 	/** 用于获取静态配置值 */
 	private static Properties props = null;
 	
@@ -64,9 +72,10 @@ public class BaseConstant {
 		LOGINUTIL_URL = props.getProperty("loginutil.url");
 		/** 验证码对比图片 */
 		CODERECOGNITIONUTIL_URL = props.getProperty("coderecognitionutil.url");
+		JDPIN = props.getProperty("jd.pin");
 		
-		glscLoginServiceModel.setStckaccount(props.getProperty("stckaccount"));
-		glscLoginServiceModel.setPw(props.getProperty("stckaccountpw"));
+		STCKACCOUNT = props.getProperty("stckaccount");
+		STCKACCOUNTPW = props.getProperty("stckaccountpw");
 	}
 	
 	public static Map<String, StockStatEnum> stockMap = Maps.newLinkedHashMap();
