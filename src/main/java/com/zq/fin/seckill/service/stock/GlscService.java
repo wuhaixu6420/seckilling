@@ -2,6 +2,8 @@ package com.zq.fin.seckill.service.stock;
 
 import com.zq.fin.seckill.dto.DataRseult;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
+import com.zq.fin.seckill.entity.model.AssetGlscMode;
+import com.zq.fin.seckill.entity.model.ClinchdealGLscModel;
 
 /**
  * 用于国联证券账户的相关业务
@@ -23,12 +25,6 @@ public interface GlscService {
 	RegModelResult glscLogin();
 	
 	/**
-	 * 通过config文件获取证券信息
-	 * @return
-	 */
-	void getGlscLoginServiceModelforConfig();
-	
-	/**
 	 * 手动买入
 	 * @param glscLoginServiceModel
 	 * @return
@@ -39,20 +35,20 @@ public interface GlscService {
 	 * 自动买入
 	 * @return
 	 */
-	RegModelResult glscBuy();
+	RegModelResult glscBuy(AssetGlscMode assetGlscMode, ClinchdealGLscModel clinchdealGLscModel);
 	
 	/**
 	 * 手动卖出
 	 * @param glscLoginServiceModel
 	 * @return
 	 */
-	RegModelResult glscSell(String stockCode, String price, String num);
+	RegModelResult glscSale(String stockCode, String price, String num);
 	
 	/**
 	 * 自动卖出
 	 * @return
 	 */
-	RegModelResult glscSell();
+	RegModelResult glscSale(AssetGlscMode assetGlscMode, ClinchdealGLscModel clinchdealGLscModel);
 	
 	/**
 	 * 获取持仓信息
@@ -64,11 +60,24 @@ public interface GlscService {
 	 * 获取当前资金信息
 	 * @return
 	 */
-	RegModelResult glscGetAsset();
+	DataRseult<?> glscGetAsset();
 	
 	/**
-	 * 
+	 * 根据雪球网API，获取股票信息
 	 * @return
 	 */
 	DataRseult<?> getStockInfoForXueQiu();
+	
+	/**
+	 * 获取当日成交记录
+	 * @param pin
+	 * @return
+	 */
+	DataRseult<?> nowDayClinchdeal(String pin);
+	
+	/**
+	 * 自动跟单
+	 * @return
+	 */
+	DataRseult<?> automaticDocumentary();
 }

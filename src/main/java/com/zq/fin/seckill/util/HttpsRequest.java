@@ -226,5 +226,76 @@ public class HttpsRequest {
 			}
 		}
 		return sb.substring(0, sb.length()-1);
+	}
+	
+	/**
+	 * 发起https请求并获取结果
+	 * 
+	 * @param requestUrl 请求地址
+	 * @param params 提交的数据
+	 */
+	public static String sendGet(String requestUrl, String params){
+		String result = "";
+		System.setProperty ("jsse.enableSNIExtension", "false");
+		StringBuffer buffer = new StringBuffer();
+		try {
+			// 创建SSLContext对象，并使用我们指定的信任管理器初始化
+			TrustManager[] tm = { new MyX509TrustManager() };
+			SSLContext sslContext = SSLContext.getInstance("SSL", "SunJSSE");
+			sslContext.init(null, tm, new java.security.SecureRandom());
+			// 从上述SSLContext对象中得到SSLSocketFactory对象
+			SSLSocketFactory ssf = sslContext.getSocketFactory();
+			URL url = new URL(requestUrl);
+			HttpsURLConnection httpUrlConn = (HttpsURLConnection) url.openConnection();
+			httpUrlConn.setSSLSocketFactory(ssf);
+			httpUrlConn.setRequestProperty("ContentType", "application/x-www-form-urlencoded"); 
+//			Cache-Control	max-age=0
+//			Content-Type	application/json;charset=UTF-8
+//			Cache-Control	private, no-store, no-cache, must-revalidate, max-age=0
+			httpUrlConn.setRequestProperty("Cache-Control", "private, no-store, no-cache, must-revalidate, max-age=0");
+			httpUrlConn.setDoOutput(true);
+			httpUrlConn.setDoInput(true);
+			httpUrlConn.setUseCaches(false);
+			// 设置请求方式（GET）
+			httpUrlConn.setRequestMethod("GET");
+			httpUrlConn.connect();
+			// 当有数据需要提交时
+			if (null != params) {
+				OutputStream outputStream = httpUrlConn.getOutputStream();
+				// 注意编码格式，防止中文乱码
+				outputStream.write(params.getBytes("UTF-8"));
+				outputStream.close();
+			}
+			// 将返回的输入流转换成字符串
+			InputStream inputStream = httpUrlConn.getInputStream();
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "utf-8");
+			BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+			String str = null;
+			while ((str = bufferedReader.readLine()) != null) {
+				buffer.append(str);
+			}
+			bufferedReader.close();
+			inputStreamReader.close();
+			// 释放资源
+			inputStream.close();
+			inputStream = null;
+			@SuppressWarnings("unused")
+			String cookieVal = "";  
+			String key = null;  
+			//取cookie  
+			for(int i = 1; (key = httpUrlConn.getHeaderFieldKey(i)) != null; i++){  
+				if(key.equalsIgnoreCase("set-cookie")){  
+					cookieVal += httpUrlConn.getHeaderField(i)+";";  
+				}
+			}
+			httpUrlConn.disconnect();
+			result = buffer.toString();
+		} catch (ConnectException ce) {
+			logger.info("Https server connection timed out.");
+		} catch (Exception e) {
+			logger.info("https request error:{}");
+			e.printStackTrace();
 		}
+		return result;
+	}	
 }

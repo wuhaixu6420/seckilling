@@ -6,15 +6,21 @@
 
 package com.zq.fin.seckill.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.springside.modules.utils.Clock;
 
 import com.zq.fin.seckill.common.BaseConstant;
+import com.zq.fin.seckill.entity.model.ClinchdealGLscModel;
 
 public class BaseService extends BaseConstant{
 	
 	/** 时钟 */
 	protected Clock clock = Clock.DEFAULT;
+	
+	protected static Map<String, ClinchdealGLscModel> clichdealMap = new HashMap<>();
 	
 	/**
 	 * log记录start（Service）

@@ -26,7 +26,6 @@ public class BuyGlscTest extends BaseConstant{
 	@Test
 	public void buyTest() throws ConnectException{
 		//登录
-		glscService.getGlscLoginServiceModelforConfig();
 		glscService.glscLogin();
 		
 	}

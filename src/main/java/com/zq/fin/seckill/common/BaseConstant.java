@@ -13,6 +13,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.google.common.collect.Maps;
 import com.zq.fin.seckill.dto.GlscLoginServiceModel;
+import com.zq.fin.seckill.enums.StockStatEnum;
 
 /**
  * 公用衡量
@@ -36,11 +37,10 @@ public class BaseConstant {
 	public static final String SH = "SH";
 	public static final String SZ = "SZ";
 	
-	//登录账户
-	public static String stckaccount;
-	
-	//登录密码
-	public static String stckaccountpw;
+	//买入
+	public static final String BUY = "buy";
+	//卖出
+	public static final String SALE = "sale";
 	
 	//用于证券登录使用
 	protected static GlscLoginServiceModel glscLoginServiceModel;
@@ -64,12 +64,15 @@ public class BaseConstant {
 		LOGINUTIL_URL = props.getProperty("loginutil.url");
 		/** 验证码对比图片 */
 		CODERECOGNITIONUTIL_URL = props.getProperty("coderecognitionutil.url");
+		
+		glscLoginServiceModel.setStckaccount(props.getProperty("stckaccount"));
+		glscLoginServiceModel.setPw(props.getProperty("stckaccountpw"));
 	}
 	
-	public static Map<Integer, String> stockMap = Maps.newLinkedHashMap();
+	public static Map<String, StockStatEnum> stockMap = Maps.newLinkedHashMap();
 	static{
-		stockMap.put(1,"沪A-A466777393");
-		stockMap.put(0, "深A-0200381345");
+		stockMap.put(SH, StockStatEnum.GDTYPE_SH);
+		stockMap.put(SZ, StockStatEnum.GDTYPE_SZ);
 	}
 	
 }

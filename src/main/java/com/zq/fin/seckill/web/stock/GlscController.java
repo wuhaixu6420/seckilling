@@ -67,8 +67,6 @@ public class GlscController extends BaseController {
 	@ResponseBody
 	public RegModelResult automaticLoginGlsc(){
 		//调取config中文件信息
-		//自动登录
-		glscService.getGlscLoginServiceModelforConfig();
 		//证券登录
 		RegModelResult regModelResult = glscService.glscLogin();
 		//返回，成功  跳转，失败  继续登录
@@ -87,6 +85,17 @@ public class GlscController extends BaseController {
 	}
 	
 	/**
+	 * 获取当前资产信息
+	 * @return
+	 */
+	@RequestMapping(value = "/asset", method = RequestMethod.GET)
+	@ResponseBody
+	public DataRseult<?> getAsset(){
+		DataRseult<?> dataRseult = glscService.glscGetAsset();
+		return dataRseult;
+	}
+	
+	/**
 	 * 证券买入
 	 * @return
 	 */
@@ -94,7 +103,6 @@ public class GlscController extends BaseController {
 	@ResponseBody
 	public RegModelResult buyGlsc(String stockCode, String price, String num){
 		try {
-//			LoginUtil.buyStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
 			LoginUtil.buyStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
 		} catch (ConnectException e) {
 			e.printStackTrace();
@@ -107,18 +115,45 @@ public class GlscController extends BaseController {
 	 * 证券卖出
 	 * @return
 	 */
-	@RequestMapping(value = "/sell", method = RequestMethod.GET)
+	@RequestMapping(value = "/sale", method = RequestMethod.GET)
 	@ResponseBody
-	public RegModelResult sellGlsc(String stockCode, String price, String num){
+	public RegModelResult saleGlsc(String stockCode, String price, String num){
 		try {
-//			LoginUtil.sellStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
-			LoginUtil.sellStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
+			LoginUtil.saleStockToGlsc(glscLoginServiceModel, new StockBusinessModel(StockStatEnum.GDTYPE_SH, "502005", "1.160", "100"));
 		} catch (ConnectException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
+	/**
+	 * jd的股神当日成交记录
+	 * @return
+	 */
+	@RequestMapping(value = "/clichdeal", method = RequestMethod.GET)
+	@ResponseBody
+	public DataRseult<?> getClichdeal(){
+		DataRseult<?> dataRseult = glscService.nowDayClinchdeal("小妖嘿嘿163");
+		return dataRseult;
+	}
+	
+	/**
+	 * 自动跟单
+	 */
+	@RequestMapping(value = "documentary", method = RequestMethod.GET)
+	public DataRseult<?> automaticDocumentary(){
+		
+		
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
 	public String detail(){

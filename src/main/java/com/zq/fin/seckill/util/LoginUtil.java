@@ -539,7 +539,7 @@ public class LoginUtil
 	 * @return
 	 * @throws ConnectException 
 	 */
-	public static String sellStockToGlsc(GlscLoginServiceModel glscLoginServiceModel, StockBusinessModel stockBusinessModel) throws ConnectException{
+	public static String saleStockToGlsc(GlscLoginServiceModel glscLoginServiceModel, StockBusinessModel stockBusinessModel) throws ConnectException{
 		
 //		股东代码	（0，1）
 //		'gdtype=' + enc(gdtype) + 
