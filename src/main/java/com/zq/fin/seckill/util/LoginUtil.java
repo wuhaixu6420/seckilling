@@ -56,30 +56,30 @@ public class LoginUtil
 	public static String sell_glsc_url = "https://trade.glsc.com.cn/ajax/content_Sale,Tb_WebWt_glzq.ashx?_method=Tj_Sale&_session=r";
 	
 	
-	public static void getCookie(GlscLoginServiceModel glscLoginServiceModel) throws NullPointerException, Exception{
+	public static void getCookie() throws NullPointerException, Exception{
 		
 		String cookie = null;
 		
 		try {
 			
-			ResponsObj responsObj = LoginUtil.pageinit(String.valueOf(glscLoginServiceModel.getUserid()));
+			ResponsObj responsObj = LoginUtil.pageinit(String.valueOf(BaseConstant.glscLoginServiceModel.getUserid()));
 			if(ObjectUtil.isEmpty(responsObj)){
 				logger.info("cookie is null");
 				return ;
 			}
 			logger.info("1. cookie=" + responsObj.getCookie());
 			
-			LoginUtil.imgCookie(responsObj, String.valueOf(glscLoginServiceModel.getUserid()));
+			LoginUtil.imgCookie(responsObj, String.valueOf(BaseConstant.glscLoginServiceModel.getUserid()));
 			logger.info("2. cookie=" + responsObj.getCookie());
 			
 			String code = LoginUtil.identifyImg();
 			logger.info("3. code=" + code);
 			
-			cookie = LoginUtil.loginCookie(code, glscLoginServiceModel.getStckaccount(), glscLoginServiceModel.getPw(), responsObj, String.valueOf(glscLoginServiceModel.getUserid()));
+			cookie = LoginUtil.loginCookie(code, BaseConstant.glscLoginServiceModel.getStckaccount(), BaseConstant.glscLoginServiceModel.getPw(), responsObj, String.valueOf(BaseConstant.glscLoginServiceModel.getUserid()));
 			logger.info("4. cookie=" + cookie);
 		
 			//更新cookie，或者是存入cookie
-			glscLoginServiceModel.setCookie(cookie);
+			BaseConstant.glscLoginServiceModel.setCookie(cookie);
 		} catch (NullPointerException e) {
 			throw e;
 		} catch (Exception e) {

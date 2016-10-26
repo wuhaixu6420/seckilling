@@ -48,7 +48,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	public RegModelResult glscLogin() {
 		try {
 			//进行登录，获取cookie
-			LoginUtil.getCookie(glscLoginServiceModel);
+			LoginUtil.getCookie();
 		} catch (NullPointerException e) {
 			//没有获取到cookie
 			return new RegModelResult(false, "登录失败，没有获取cookie，请重新登录");
@@ -250,7 +250,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		} else {
 			//正则，去掉多余的html标签
 			Document doc = Jsoup.parse(request);
-			Element masthead = doc.select("table.mtb").last();
+			Element masthead = doc.select("table.mtb").first();
 			String content = HtmlUtil.delHTMLTag_Asset(masthead.toString());
 			
 			String [] c = content.split("abc");
