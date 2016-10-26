@@ -370,6 +370,9 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	public DataRseult<?> automaticDocumentary(){
 		//先登录状态
 		getGLscStockAccountByConfig();
+		if(ObjectUtil.isEmpty(glscLoginServiceModel.getCookie())){
+			glscLogin();
+		}
 		//获取当前总资产
 		DataRseult<?> dataRseultAsset = glscGetAsset();
 		//不在登录状态
