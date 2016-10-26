@@ -40,8 +40,8 @@ public class SeckillServiceImpl implements SeckillService{
 	@Autowired
 	private SuccessKilledMapper successKilledMapper;
 	
-	@Autowired
-	private RedisDao redisDao;
+//	@Autowired
+//	private RedisDao redisDao;
 	
 	//MD5盐值字符串，用于混淆MD5
 	private final String slat = "~!@123#$asdf%^eth&*(4235)_+";
@@ -60,20 +60,21 @@ public class SeckillServiceImpl implements SeckillService{
 	public Exposer exportSeckillUrl(long seckillId) {
 		//优化点：缓存优化：在超时的基础上维护一致性的
 		//降低数据库访问量
-		//1: 访问redis
-		Seckill seckill = redisDao.getSeckill(seckillId);
-		if(ObjectUtil.isEmpty(seckill)){
-			//2:访问数据库
-			seckill = seckillMapper.queryById(seckillId);
-			
-			//如果查询不到，返回id
-			if(ObjectUtil.isEmpty(seckill)){
-				return new Exposer(false, seckillId);
-			} else {
-				//3:放入redis
-				redisDao.putSeckill(seckill);
-			}
-		}
+//		//1: 访问redis
+//		Seckill seckill = redisDao.getSeckill(seckillId);
+//		if(ObjectUtil.isEmpty(seckill)){
+//			//2:访问数据库
+//			seckill = seckillMapper.queryById(seckillId);
+//			
+//			//如果查询不到，返回id
+//			if(ObjectUtil.isEmpty(seckill)){
+//				return new Exposer(false, seckillId);
+//			} else {
+//				//3:放入redis
+//				redisDao.putSeckill(seckill);
+//			}
+//		}
+		Seckill seckill = seckillMapper.queryById(seckillId);
 		
 		Date startTime = seckill.getStartTime();
 		Date endTime = seckill.getEndTime();
