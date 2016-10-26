@@ -531,7 +531,7 @@ public class LoginUtil
 		
 		System.out.println(content);
 		
-		return null;
+		return content;
 	}
 	
 	/**
@@ -568,8 +568,7 @@ public class LoginUtil
 		
 		System.out.println(content);
 		
-		
-		return null;
+		return content;
 	}
 	
 }
