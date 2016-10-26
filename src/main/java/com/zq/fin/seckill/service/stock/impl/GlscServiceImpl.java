@@ -10,7 +10,6 @@ import java.util.List;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -258,21 +257,16 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 			
 			AssetGlscMode assetGlscMode = new AssetGlscMode();
 //			添加剩余金额
-			assetGlscMode.setUsableasset(d[3].replace("\r|\n", "").replace("\\s*", ""));
+			assetGlscMode.setUsableasset(d[3].replaceAll("\r|\n", "").replaceAll("\\s*", "").replaceAll(" ", ""));
 //			添加股票市值
-			assetGlscMode.setStockmarketvalue(d[5].replace("\r|\n", "").replace("\\s*", ""));
+			assetGlscMode.setStockmarketvalue(d[5].replaceAll("\r|\n", "").replaceAll("\\s*", "").replaceAll(" ", ""));
 //			添加总资产
-			assetGlscMode.setTotalassets(d[7].replace("\r|\n", "").replace("\\s*", ""));
+			assetGlscMode.setTotalassets(d[7].replaceAll("\r|\n", "").replaceAll("\\s*", "").replaceAll(" ", ""));
 //			添加总盈亏
-			assetGlscMode.setTotaProfitloss(d[9].replace("\r|\n", "").replace("\\s*", ""));
+			assetGlscMode.setTotaProfitloss(d[9].replaceAll("\r|\n", "").replaceAll("\\s*", "").replaceAll(" ", ""));
 			
 			return new DataRseult<AssetGlscMode>(true, assetGlscMode);
 		}
-	}
-	
-	@Test
-	public void wewe(){
-		getStockInfoForXueQiu();
 	}
 	
 	/**
