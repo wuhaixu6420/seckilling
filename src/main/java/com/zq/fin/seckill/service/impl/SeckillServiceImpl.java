@@ -12,7 +12,6 @@ import org.springframework.util.DigestUtils;
 
 import com.zq.fin.seckill.dao.SeckillMapper;
 import com.zq.fin.seckill.dao.SuccessKilledMapper;
-import com.zq.fin.seckill.dao.cache.RedisDao;
 import com.zq.fin.seckill.dto.Exposer;
 import com.zq.fin.seckill.dto.SeckillExecution;
 import com.zq.fin.seckill.entity.Seckill;

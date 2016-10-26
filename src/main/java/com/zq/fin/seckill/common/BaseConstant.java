@@ -43,7 +43,7 @@ public class BaseConstant {
 	public static final String SALE = "sale";
 	
 	//用于证券登录使用
-	protected static GlscLoginServiceModel glscLoginServiceModel;
+	protected static GlscLoginServiceModel glscLoginServiceModel = new GlscLoginServiceModel();
 	
 	//证券账户
 	public static String STCKACCOUNT;

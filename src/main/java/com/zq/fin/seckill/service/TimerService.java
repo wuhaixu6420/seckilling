@@ -21,9 +21,6 @@ public class TimerService {
 	
 	@Scheduled(cron = "0 0/1 9,10,11,13,14,15 * * MON-FRI")
 	public void Timing_Glsc_Stock(){
-		if("".equals("")){
-			return ;
-		}
 		glscService.automaticDocumentary();
 	}
 
