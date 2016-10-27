@@ -112,14 +112,6 @@ public class GlscController extends BaseController {
 		return null;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	@RequestMapping(value = "/detail", method = RequestMethod.GET)
 	public String detail(){
 		return "stock/detail";
