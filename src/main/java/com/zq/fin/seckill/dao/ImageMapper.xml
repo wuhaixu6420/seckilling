@@ -7,6 +7,7 @@
 		<result column="url" property="url" jdbcType="VARCHAR" />
 		<result column="date" property="date" jdbcType="DATE" />
 		<result column="userId" property="userId" jdbcType="BIGINT" />
+		<result column="ownedSpace" property="ownedSpace" jdbcType="VARCHAR" />
     </resultMap>
     <sql id="Example_Where_Clause">
         <where>
@@ -67,7 +68,7 @@
         </where>
     </sql>
     <sql id="Base_Column_List">
-id,name,url,date,userId
+id,name,url,date,userId,ownedSpace
     </sql>
     <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.zq.fin.seckill.entity.ImageExample">
         select
@@ -75,7 +76,7 @@ id,name,url,date,userId
             distinct
         </if>
         <include refid="Base_Column_List" />
-        from Image
+        from image
         <if test="_parameter != null">
             <include refid="Example_Where_Clause" />
         </if>
@@ -86,29 +87,29 @@ id,name,url,date,userId
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List" />
-        from Image
+        from image
         where id = #{id,jdbcType=BIGINT}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-        delete from Image
+        delete from image
         where id = #{id,jdbcType=BIGINT}
     </delete>
     <delete id="deleteByExample" parameterType="com.zq.fin.seckill.entity.ImageExample">
-        delete from Image
+        delete from image
         <if test="_parameter != null">
             <include refid="Example_Where_Clause" />
         </if>
     </delete>
     <insert id="insert" parameterType="com.zq.fin.seckill.entity.Image">
-        insert into Image (
-		id,name,url,date,userId
+        insert into image (
+		id,name,url,date,userId,ownedSpace
         )
         values (
-		#{id,jdbcType=BIGINT},#{name,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{date,jdbcType=DATE},#{userId,jdbcType=BIGINT}
+		#{id,jdbcType=BIGINT},#{name,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{date,jdbcType=DATE},#{userId,jdbcType=BIGINT},#{ownedSpace,jdbcType=VARCHAR}
 		)
     </insert>
     <insert id="insertSelective" parameterType="com.zq.fin.seckill.entity.Image">
-        insert into Image
+        insert into image
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="name != null">
                 name,
@@ -121,6 +122,9 @@ id,name,url,date,userId
             </if>
             <if test="userId != null">
                 userId,
+            </if>
+            <if test="ownedSpace != null">
+                ownedSpace,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -136,16 +140,19 @@ id,name,url,date,userId
             <if test="userId != null">
 				#{userId,jdbcType=BIGINT}
             </if>
+            <if test="ownedSpace != null">
+                #{ownedSpace,jdbcType=VARCHAR}
+            </if>
          </trim>
     </insert>
     <select id="countByExample" parameterType="com.zq.fin.seckill.entity.ImageExample" resultType="java.lang.Integer">
-        select count(*) from Image
+        select count(*) from image
         <if test="_parameter != null">
             <include refid="Example_Where_Clause" />
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update Image
+        update image
         <set>
 		<if test="record.name != null">
 			name = #{record.name,jdbcType=VARCHAR},
@@ -159,25 +166,29 @@ id,name,url,date,userId
 		<if test="record.userId != null">
 			userId = #{record.userId,jdbcType=BIGINT},
 		</if>
+		<if test="record.ownedSpace != null">
+			ownedSpace = #{record.ownedSpace,jdbcType=VARCHAR},
+		</if>
         </set>
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause" />
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update Image
+        update image
 		<set>
 			name = #{record.name,jdbcType=VARCHAR},
 			url = #{record.url,jdbcType=VARCHAR},
 			date = #{record.date,jdbcType=DATE},
 			userId = #{record.userId,jdbcType=BIGINT},
+			ownedSpace = #{record.ownedSpace,jdbcType=VARCHAR},
 		</set>
         <if test="_parameter != null">
             <include refid="Update_By_Example_Where_Clause" />
         </if>
     </update>
     <update id="updateByPrimaryKeySelective" parameterType="com.zq.fin.seckill.entity.Image">
-        update Image
+        update image
         <set>
 		<if test="name != null">
 			name = #{name,jdbcType=VARCHAR},
@@ -191,11 +202,14 @@ id,name,url,date,userId
 		<if test="userId != null">
 			userId = #{userId,jdbcType=BIGINT},
 		</if>
+		<if test="ownedSpace != null">
+			ownedSpace = #{ownedSpace,jdbcType=VARCHAR},
+		</if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.zq.fin.seckill.entity.Image">
-	   update Image
+	   update image
         <set> 
 		<if test="name != null">
 			name = #{name,jdbcType=VARCHAR},
@@ -209,6 +223,9 @@ id,name,url,date,userId
 		<if test="userId != null">
 			userId = #{userId,jdbcType=BIGINT},
 		</if>
+		<if test="ownedSpace != null">
+			ownedSpace = #{ownedSpace,jdbcType=VARCHAR},
+		</if>
 		</set>
         where id = #{id,jdbcType=BIGINT}
     </update>
@@ -220,7 +237,7 @@ id,name,url,date,userId
             distinct
         </if>
         <include refid="Base_Column_List" />
-        from Image
+        from image
         <if test="_parameter != null">
             <include refid="Example_Where_Clause" />
         </if>

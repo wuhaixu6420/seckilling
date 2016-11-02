@@ -12,6 +12,7 @@ import java.util.Properties;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.google.common.collect.Maps;
+import com.qiniu.util.Auth;
 import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.enums.StockStatEnum;
 
@@ -41,6 +42,12 @@ public class BaseConstant {
 	public static final String BUY = "buy";
 	//卖出
 	public static final String SALE = "sale";
+	
+	//密钥配置
+	//七牛文件操作等，操作授权
+	public static Auth auth = Auth.create("wMpqDJNqKPyA0yKwQneGKlvKwX_-bRmgsaF2Iprp", "bL702PQ2k2JD4u7ZjKw-ud0OUBhVWlb8bXX9NPxw");
+	//七牛 内置链接url
+	public static final String QNurl = "http://ofr3s6hia.bkt.clouddn.com/";
 	
 	//用于证券登录使用
 	public static GlscLoginServiceModel glscLoginServiceModel = new GlscLoginServiceModel();

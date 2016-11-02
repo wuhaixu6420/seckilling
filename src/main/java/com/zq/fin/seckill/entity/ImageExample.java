@@ -455,6 +455,76 @@ public class ImageExample {
 			addCriterion("userId not between", value1, value2, "userId");
 			return (Criteria) this;
 		}
+		
+		public Criteria andOwnedSpaceIsNull() {
+			addCriterion("ownedSpace is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceIsNotNull() {
+			addCriterion("ownedSpace is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceEqualTo(String value) {
+			addCriterion("ownedSpace =", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceNotEqualTo(String value) {
+			addCriterion("ownedSpace <>", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceGreaterThan(String value) {
+			addCriterion("ownedSpace >", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceGreaterThanOrEqualTo(String value) {
+			addCriterion("ownedSpace >=", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceLessThan(String value) {
+			addCriterion("ownedSpace <", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceLessThanOrEqualTo(String value) {
+			addCriterion("ownedSpace <=", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceLike(String value) {
+			addCriterion("ownedSpace like", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceNotLike(String value) {
+			addCriterion("ownedSpace not like", value, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceIn(List<String> values) {
+			addCriterion("ownedSpace in", values, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceNotIn(List<String> values) {
+			addCriterion("ownedSpace not in", values, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceBetween(String value1, String value2) {
+			addCriterion("ownedSpace between", value1, value2, "ownedSpace");
+			return (Criteria) this;
+		}
+
+		public Criteria andOwnedSpaceNotBetween(String value1, String value2) {
+			addCriterion("ownedSpace not between", value1, value2, "ownedSpace");
+			return (Criteria) this;
+		}
 
 	}
 

@@ -559,6 +559,12 @@
 		 <artifactId>cglib</artifactId>
 		 <version>2.2.2</version>
 		</dependency>
+		<!-- 七牛  https://portal.qiniu.com/create  个人对象存储包 -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.0.0, 7.1.99]</version>
+		</dependency>
 		
 <!-- 		<dependency> -->
 <!-- 			<groupId>cn.edu.hfut.dmic.webcollector</groupId> -->

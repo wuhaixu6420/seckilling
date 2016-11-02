@@ -33,6 +33,12 @@ public class Image implements Serializable {
 	 * 用户底
 	 */
 	private Long userId;
+	
+	/**
+	 * 所属空间
+	 */
+	private String ownedSpace;
+	
 
 	public Long getId() {
 		return id;
@@ -74,6 +80,14 @@ public class Image implements Serializable {
 		this.userId = userId;
 	}
 	
+	public String getOwnedSpace() {
+		return ownedSpace;
+	}
+
+	public void setOwnedSpace(String ownedSpace) {
+		this.ownedSpace = ownedSpace;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

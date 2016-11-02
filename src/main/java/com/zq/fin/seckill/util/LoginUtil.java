@@ -42,8 +42,7 @@ import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.entity.model.StockBusinessModel;
 
 
-public class LoginUtil
-{
+public class LoginUtil {
 	private static Logger logger = LoggerFactory.getLogger(LoginUtil.class);
 	
 	public static Map<String, DefaultHttpClient> httpclientMap = new HashMap<String, DefaultHttpClient>();
