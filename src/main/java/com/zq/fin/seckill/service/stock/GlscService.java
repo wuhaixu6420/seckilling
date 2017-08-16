@@ -1,6 +1,6 @@
 package com.zq.fin.seckill.service.stock;
 
-import com.zq.fin.seckill.dto.DataRseult;
+import com.zq.fin.seckill.dto.DataResult;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
 import com.zq.fin.seckill.entity.model.AssetGlscMode;
 import com.zq.fin.seckill.entity.model.ClinchdealGLscModel;
@@ -40,30 +40,30 @@ public interface GlscService {
 	 * 获取持仓信息
 	 * @return
 	 */
-	DataRseult<?> glscGetPosition();
+	DataResult<?> glscGetPosition();
 	
 	/**
 	 * 获取当前资金信息
 	 * @return
 	 */
-	DataRseult<?> glscGetAsset();
+	DataResult<?> glscGetAsset();
 	
 	/**
 	 * 根据雪球网API，获取股票信息
 	 * @return
 	 */
-	DataRseult<?> getStockInfoForXueQiu();
+	DataResult<?> getStockInfoForXueQiu();
 	
 	/**
 	 * 获取当日成交记录
 	 * @param pin
 	 * @return
 	 */
-	DataRseult<?> nowDayClinchdeal(String pin);
+	DataResult<?> nowDayClinchdeal(String pin);
 	
 	/**
 	 * 自动跟单
 	 * @return
 	 */
-	DataRseult<?> automaticDocumentary();
+	DataResult<?> automaticDocumentary();
 }

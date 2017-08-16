@@ -2,7 +2,7 @@ package com.zq.fin.seckill.dto;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class DataRseult<T> {
+public class DataResult<T> {
 	
 	private boolean success;
 	
@@ -10,12 +10,12 @@ public class DataRseult<T> {
 	
 	private String error;
 	
-	public DataRseult(boolean success, T data) {
+	public DataResult(boolean success, T data) {
 		this.success = success;
 		this.data = data;
 	}
 
-	public DataRseult(boolean success, String error) {
+	public DataResult(boolean success, String error) {
 		this.success = success;
 		this.error = error;
 	}

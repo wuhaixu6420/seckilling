@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.zq.fin.seckill.common.BaseConstant;
 import com.zq.fin.seckill.dao.ImageMapper;
-import com.zq.fin.seckill.dto.DataRseult;
+import com.zq.fin.seckill.dto.DataResult;
 import com.zq.fin.seckill.entity.Image;
 import com.zq.fin.seckill.entity.ImageExample;
 import com.zq.fin.seckill.service.image.ImageService;
@@ -25,7 +25,7 @@ public class ImageServiceImpl extends BaseConstant implements ImageService {
 	private ImageMapper imageMapper;
 
 	@Override
-	public DataRseult<?> upload(Long userId, String ownedSpace, InputStream inputStream, String fileName) {
+	public DataResult<?> upload(Long userId, String ownedSpace, InputStream inputStream, String fileName) {
 		try {
 			//将文件输入流   转化为二进制
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -55,19 +55,19 @@ public class ImageServiceImpl extends BaseConstant implements ImageService {
 				}
 				//没有就默认
 				imageMapper.insert(image);
-				return new DataRseult<>(true, "上传成功");
+				return new DataResult<>(true, "上传成功");
 			} else {
 				//上传失败
-				return new DataRseult<>(true, "上传失败");
+				return new DataResult<>(true, "上传失败");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new DataRseult<>(true, "上传异常");
+			return new DataResult<>(true, "上传异常");
 		}
 	}
 	
 	@Override
-	public DataRseult<?> showImage(Long userId, String ownedSpace) {
+	public DataResult<?> showImage(Long userId, String ownedSpace) {
 		ImageExample imageExample = new ImageExample();
 		//根据所属空间查询对应的所有图片信息
 		if(ObjectUtil.isEmpty(ownedSpace)){
@@ -79,25 +79,25 @@ public class ImageServiceImpl extends BaseConstant implements ImageService {
 			.andOwnedSpaceEqualTo(ownedSpace);
 		}
 		List<Image> images = imageMapper.selectByExample(imageExample);
-		return new DataRseult<>(true, images);
+		return new DataResult<>(true, images);
 	}
 
 	@Override
-	public DataRseult<?> showDetailImage(Long id) {
+	public DataResult<?> showDetailImage(Long id) {
 		//通过条件查询  通过id 查询对应的image信息
 		ImageExample imageExample = new ImageExample();
 		imageExample.createCriteria()
 		.andIdEqualTo(id);
 		List<Image> images = imageMapper.selectByExample(imageExample);
 		if(images.isEmpty()){
-			return new DataRseult<>(false, "该图片不存在");
+			return new DataResult<>(false, "该图片不存在");
 		} else {
-			return new DataRseult<>(true, images.get(0));
+			return new DataResult<>(true, images.get(0));
 		}
 	}
 	
 	@Override
-	public DataRseult<?> deleteImage(Long id) {
+	public DataResult<?> deleteImage(Long id) {
 		//因为七牛的删除文件需要名称，所以先查询
 		ImageExample imageExample = new ImageExample();
 		imageExample.createCriteria()
@@ -110,9 +110,9 @@ public class ImageServiceImpl extends BaseConstant implements ImageService {
 			if(result == 1){
 				//删除图片，七牛云
 				QNFileUtils.delete(images.get(0).getName());
-				return new DataRseult<>(true, "删除成功");
+				return new DataResult<>(true, "删除成功");
 			}
 		}
-		return new DataRseult<>(false, "删除失败");
+		return new DataResult<>(false, "删除失败");
 	}
 }

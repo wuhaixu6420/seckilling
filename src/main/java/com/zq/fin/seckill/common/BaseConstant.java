@@ -6,6 +6,7 @@
 package com.zq.fin.seckill.common;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -21,6 +22,12 @@ import com.zq.fin.seckill.enums.StockStatEnum;
  * 
  */
 public class BaseConstant {
+	
+	protected static Map<Integer, String> logerEnums = new HashMap<Integer, String>();
+	static {
+		logerEnums.put(0, "[start]");
+		logerEnums.put(1, "[end]");
+	}
 	
 	public static final String START = "[start]";
 

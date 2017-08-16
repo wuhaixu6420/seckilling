@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zq.fin.seckill.common.BaseConstant;
 import com.zq.fin.seckill.common.BaseGroup.GroupGlscLogin;
-import com.zq.fin.seckill.dto.DataRseult;
+import com.zq.fin.seckill.dto.DataResult;
 import com.zq.fin.seckill.dto.GlscLoginServiceModel;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
 import com.zq.fin.seckill.service.BaseService;
@@ -76,9 +76,9 @@ public class GlscController extends BaseController {
 	 */
 	@RequestMapping(value = "/position", method = RequestMethod.GET)
 	@ResponseBody
-	public DataRseult<?> glscGetPosition(){
-		DataRseult<?> dataRseult = glscService.glscGetPosition();
-		return dataRseult;
+	public DataResult<?> glscGetPosition(){
+		DataResult<?> dataResult = glscService.glscGetPosition();
+		return dataResult;
 	}
 	
 	/**
@@ -87,9 +87,9 @@ public class GlscController extends BaseController {
 	 */
 	@RequestMapping(value = "/asset", method = RequestMethod.GET)
 	@ResponseBody
-	public DataRseult<?> getAsset(){
-		DataRseult<?> dataRseult = glscService.glscGetAsset();
-		return dataRseult;
+	public DataResult<?> getAsset(){
+		DataResult<?> dataResult = glscService.glscGetAsset();
+		return dataResult;
 	}
 	
 	/**
@@ -98,8 +98,8 @@ public class GlscController extends BaseController {
 	 */
 	@RequestMapping(value = "/clichdeal", method = RequestMethod.GET)
 	@ResponseBody
-	public DataRseult<?> getClichdeal(){
-		DataRseult<?> dataRseult = glscService.nowDayClinchdeal(JDPIN);
+	public DataResult<?> getClichdeal(){
+		DataResult<?> dataRseult = glscService.nowDayClinchdeal(JDPIN);
 		return dataRseult;
 	}
 	
@@ -107,7 +107,7 @@ public class GlscController extends BaseController {
 	 * 自动跟单
 	 */
 	@RequestMapping(value = "documentary", method = RequestMethod.GET)
-	public DataRseult<?> automaticDocumentary(){
+	public DataResult<?> automaticDocumentary(){
 		
 		return null;
 	}

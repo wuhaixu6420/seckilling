@@ -10,12 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springside.modules.utils.Clock;
 
 import com.zq.fin.seckill.common.BaseConstant;
 import com.zq.fin.seckill.entity.model.ClinchdealGLscModel;
 
 public class BaseService extends BaseConstant{
+	
+	protected static Logger logger = LoggerFactory.getLogger(BaseService.class);
 	
 	/** 时钟 */
 	protected Clock clock = Clock.DEFAULT;

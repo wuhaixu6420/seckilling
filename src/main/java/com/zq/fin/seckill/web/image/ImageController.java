@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.zq.fin.seckill.dto.DataRseult;
+import com.zq.fin.seckill.dto.DataResult;
 import com.zq.fin.seckill.service.image.ImageService;
 import com.zq.fin.seckill.util.ObjectUtil;
 
@@ -35,8 +35,8 @@ public class ImageController {
 	@RequestMapping(value="/{userid}/list", method = RequestMethod.GET)
 	public String pictureUploadGet(@PathVariable("userid") Long userid, String ownedSpace, HttpServletRequest request, Model model) {
 		//获取所属空间对应的图片
-		DataRseult<?> dataRseult = imageService.showImage(userid, ownedSpace);
-		model.addAttribute("dataImage", dataRseult);
+		DataResult<?> dataResult = imageService.showImage(userid, ownedSpace);
+		model.addAttribute("dataImage", dataResult);
 		return "image/list";
 	}
 	
@@ -48,10 +48,10 @@ public class ImageController {
 	 */
 	@RequestMapping(value="/{id}/detail" ,method = RequestMethod.GET)
 	@ResponseBody
-	public DataRseult<?> showDetail(@PathVariable("id") Long id, HttpServletRequest request){
+	public DataResult<?> showDetail(@PathVariable("id") Long id, HttpServletRequest request){
 		//通过id 查询图片信息
-		DataRseult<?> dataRseult = imageService.showDetailImage(id);
-		return dataRseult;
+		DataResult<?> dataResult = imageService.showDetailImage(id);
+		return dataResult;
 	}
 	
 	/**
@@ -62,10 +62,10 @@ public class ImageController {
 	 */
 	@RequestMapping(value="/{id}/delete" ,method = RequestMethod.GET)
 	@ResponseBody
-	public DataRseult<?> delete(@PathVariable("id") Long id, HttpServletRequest request){
+	public DataResult<?> delete(@PathVariable("id") Long id, HttpServletRequest request){
 		//通过id 查询图片信息
-		DataRseult<?> dataRseult = imageService.deleteImage(id);
-		return dataRseult;
+		DataResult<?> dataResult = imageService.deleteImage(id);
+		return dataResult;
 	}
 	
 	/**
@@ -75,8 +75,8 @@ public class ImageController {
 	 */
 	@RequestMapping(value="/{userid}/upload", method = RequestMethod.POST)
 	@ResponseBody
-	public DataRseult<?> pictureUploadPost(@PathVariable("userid") Long userid, String ownedSpace, HttpServletRequest request, HttpServletResponse response) {
-		DataRseult<?> dataRseult = null;
+	public DataResult<?> pictureUploadPost(@PathVariable("userid") Long userid, String ownedSpace, HttpServletRequest request, HttpServletResponse response) {
+		DataResult<?> dataResult = null;
 		InputStream inputStream = null;
 		try {
 			CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
@@ -89,12 +89,12 @@ public class ImageController {
 				inputStream = multipartFile.getInputStream();
 				//获取所属空间
 				//开始上传云端文件
-				dataRseult = imageService.upload(userid, ownedSpace, inputStream, multipartFile.getOriginalFilename());
-				return dataRseult;
+				dataResult = imageService.upload(userid, ownedSpace, inputStream, multipartFile.getOriginalFilename());
+				return dataResult;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return new DataRseult<>(false, "文件转化流异常");
+			return new DataResult<>(false, "文件转化流异常");
 		} finally {
 			if(ObjectUtil.isNotEmpty(inputStream)){
 				try {
@@ -104,6 +104,6 @@ public class ImageController {
 				}
 			}
 		}
-		return new DataRseult<>(false, "文件上传失败");
+		return new DataResult<>(false, "文件上传失败");
 	}
 }

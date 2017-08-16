@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.zq.fin.seckill.dto.DataRseult;
+import com.zq.fin.seckill.dto.DataResult;
 import com.zq.fin.seckill.dto.reg.RegModelResult;
 import com.zq.fin.seckill.entity.model.AssetGlscMode;
 import com.zq.fin.seckill.entity.model.ClinchdealGLscModel;
@@ -138,7 +138,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 		BigDecimal bigDecimal = new BigDecimal(0.00);
 		//如果是清仓
 		if(new BigDecimal(0.00).compareTo(new BigDecimal(clichdealNum[1])) == 0){
-			DataRseult<?> dataRseult_position = glscGetPosition();
+			DataResult<?> dataRseult_position = glscGetPosition();
 			if(ObjectUtil.isNotEmpty(dataRseult_position.getData()) && dataRseult_position.getData() instanceof List){
 				@SuppressWarnings("unchecked")
 				List<PositionGlscModel> positionGlscModels = (List<PositionGlscModel>)dataRseult_position.getData();
@@ -188,7 +188,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	}
 	
 	@Override
-	public DataRseult<List<PositionGlscModel>> glscGetPosition() {
+	public DataResult<List<PositionGlscModel>> glscGetPosition() {
 		//获取持仓信息
 		String request = HttpsRequest.XMLhttpRequest(chicang_url + "?" + System.currentTimeMillis(), "GET", glscLoginServiceModel.getCookie());
 		
@@ -202,7 +202,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 			//重新获取cookie
 			glscLogin();
 			
-			return new DataRseult<>(false, "cookie获取失败");
+			return new DataResult<>(false, "cookie获取失败");
 		} else {
 			//正则，去掉多余的html标签
 			Document doc = Jsoup.parse(request);
@@ -230,12 +230,12 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 				positionGlscModels.add(positionGlscModel);
 			}
 			
-			return new DataRseult<List<PositionGlscModel>>(true, positionGlscModels);
+			return new DataResult<List<PositionGlscModel>>(true, positionGlscModels);
 		}
 	}
 
 	@Override
-	public DataRseult<?> glscGetAsset() {
+	public DataResult<?> glscGetAsset() {
 		String request = HttpsRequest.XMLhttpRequest(chicang_url + "?" + System.currentTimeMillis(), "GET", glscLoginServiceModel.getCookie());
 		
 		String sub="交易链接出现异常断开，请重新登录交易或者关闭浏览器后重新登录";
@@ -245,7 +245,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 			//没有获取到持仓信息，应该是cookie出现问题
 			//重新获取cookie
 			glscLogin();
-			return new DataRseult<>(false, "cookie获取失败");
+			return new DataResult<>(false, "cookie获取失败");
 		} else {
 			//正则，去掉多余的html标签
 			Document doc = Jsoup.parse(request);
@@ -265,7 +265,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 //			添加总盈亏
 			assetGlscMode.setTotaProfitloss(d[9].replaceAll("\r|\n", "").replaceAll("\\s*", "").replaceAll(" ", ""));
 			
-			return new DataRseult<AssetGlscMode>(true, assetGlscMode);
+			return new DataResult<AssetGlscMode>(true, assetGlscMode);
 		}
 	}
 	
@@ -274,7 +274,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	 * TODO
 	 */
 	@Override
-	public DataRseult<?> getStockInfoForXueQiu(){
+	public DataResult<?> getStockInfoForXueQiu(){
 		
 		try {
 			String requestUrl = "https://xueqiu.com/stock/forchart/stocklist.json";
@@ -293,7 +293,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	}
 	
 	@Override
-	public DataRseult<?> nowDayClinchdeal(String pin) {
+	public DataResult<?> nowDayClinchdeal(String pin) {
 		logInfoStart(logger, Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		List<ClinchdealGLscModel> clinchdealGLscModels = new ArrayList<ClinchdealGLscModel>();
@@ -349,11 +349,11 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 				}
 			}
 			logInfoEnd(logger, Thread.currentThread().getStackTrace()[1].getMethodName());
-			return new DataRseult<List<ClinchdealGLscModel>>(true, clinchdealGLscModels);
+			return new DataResult<List<ClinchdealGLscModel>>(true, clinchdealGLscModels);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logInfoEnd(logger, Thread.currentThread().getStackTrace()[1].getMethodName());
-			return new DataRseult<>(false, "异常输出");
+			return new DataResult<>(false, "异常输出");
 		}
 	}
 	
@@ -361,14 +361,14 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 	 * 定时器，周一至周五，每一分钟获取数据
 	 */
 	@Override
-	public DataRseult<?> automaticDocumentary(){
+	public DataResult<?> automaticDocumentary(){
 		//先登录状态
 		getGLscStockAccountByConfig();
 		if(ObjectUtil.isEmpty(glscLoginServiceModel.getCookie())){
 			glscLogin();
 		}
 		//获取当前总资产
-		DataRseult<?> dataRseultAsset = glscGetAsset();
+		DataResult<?> dataRseultAsset = glscGetAsset();
 		//不在登录状态
 		if(!dataRseultAsset.isSuccess()){
 			//登录
@@ -381,7 +381,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 			//强转类型
 			AssetGlscMode assetGlscMode = (AssetGlscMode)dataRseultAsset.getData();
 			//可以考虑数据库换一个跟单用户
-			DataRseult<?> dataRseult_Clinchdeal = nowDayClinchdeal(JDPIN);
+			DataResult<?> dataRseult_Clinchdeal = nowDayClinchdeal(JDPIN);
 			
 			if(dataRseult_Clinchdeal.getData() instanceof List){
 				@SuppressWarnings("unchecked")
@@ -404,11 +404,11 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 						}
 						regModelResults.add(regModelResult);
 					}
-					return new DataRseult<>(true, regModelResults);
+					return new DataResult<>(true, regModelResults);
 				} else {
 					//当前没有成交记录
 				}
-				return new DataRseult<>(true, "当前没有成交记录");
+				return new DataResult<>(true, "当前没有成交记录");
 			} else {
 				//获取成交记录失败
 			}
@@ -417,7 +417,7 @@ public class GlscServiceImpl extends BaseService implements GlscService {
 			//重新登录
 			glscLogin();
 		}
-		return new DataRseult<>(false, "异常状态");
+		return new DataResult<>(false, "异常状态");
 	}
 	
 }
